@@ -1,36 +1,38 @@
-import * as React from "react";
+// import * as React from "react";
 
-const list = [
-  {
-    title: "React",
-    url: "someUrl",
-    author: "author1",
-    num_comments: 3,
-    points: 4,
-    objectID: 0,
-  },
-  {
-    title: "Redux",
-    url: "url2",
-    author: "author2",
-    num_comments: 2,
-    points: 5,
-    objectID: 1,
-  },
-];
+const App = () => {
+  const stories = [
+    {
+      title: "React",
+      url: "someUrl",
+      author: "author1",
+      num_comments: 3,
+      points: 4,
+      objectID: 0,
+    },
+    {
+      title: "Redux",
+      url: "url2",
+      author: "author2",
+      num_comments: 2,
+      points: 5,
+      objectID: 1,
+    },
+  ];
+  return (
+    <div>
+      <h1>Dev Stories</h1>
+      <Search></Search>
+      <hr />
+      <List list={stories} />
+    </div>
+  );
+};
 
-const App = () => (
-  <div>
-    <h1>Dev Stories</h1>
-    <Search></Search>
-    <hr />
-    <List></List>
-  </div>
-);
-
-const List = () => (
+const List = (props) => (
   <ul>
-    {list.map((x) => (
+    {console.log(props)}
+    {props.list.map((x) => (
       <li key={x.objectID}>
         {x.title}
         <span>
