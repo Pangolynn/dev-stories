@@ -1,6 +1,10 @@
 // import * as React from "react";
 
+import { useState } from "react";
+
 const App = () => {
+  const [searchTerm, setSearchterm] = useState("");
+
   const stories = [
     {
       title: "React",
@@ -19,10 +23,15 @@ const App = () => {
       objectID: 1,
     },
   ];
+
+  const handleSearch = (event) => {
+    setSearchterm(event.target.value);
+  };
+
   return (
     <div>
       <h1>Dev Stories</h1>
-      <Search></Search>
+      <Search onSearch={handleSearch}></Search>
       <hr />
       <List list={stories} />
     </div>
@@ -33,27 +42,30 @@ const List = (props) => (
   <ul>
     {console.log(props)}
     {props.list.map((x) => (
-      <li key={x.objectID}>
-        {x.title}
-        <span>
-          <a href={x.url}>{x.title}</a>
-        </span>
-        <span>{x.author}</span>
-        <span>{x.num_comments}</span>
-        <span>{x.points}</span>
-      </li>
+      <Item key={x.objectID} item={x} />
     ))}
   </ul>
 );
 
-const Search = () => {
-  const changeHandler = (event) => {
-    console.log(event.target.value);
-  };
+const Item = (props) => {
+  return (
+    <li>
+      {props.item.title}
+      <span>
+        <a href={props.item.url}>{props.item.title}</a>
+      </span>
+      <span>{props.item.author}</span>
+      <span>{props.item.num_comments}</span>
+      <span>{props.item.points}</span>
+    </li>
+  );
+};
+
+const Search = (props) => {
   return (
     <div>
       <label htmlFor="search">Search: </label>
-      <input onChange={changeHandler} type="text" id="search" />
+      <input onChange={props.onSearch} type="text" id="search" />
     </div>
   );
 };
