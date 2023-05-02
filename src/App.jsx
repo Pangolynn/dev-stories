@@ -28,22 +28,25 @@ const App = () => {
     setSearchterm(event.target.value);
   };
 
+  const filteredStories = stories.filter((x) => {
+    return x.title.includes(searchTerm);
+  });
+
   return (
     <div>
       <h1>Dev Stories</h1>
       <Search onSearch={handleSearch}></Search>
       <hr />
-      <List list={stories} />
+      <List list={filteredStories} />
     </div>
   );
 };
 
 const List = (props) => (
   <ul>
-    {console.log(props)}
-    {props.list.map((x) => (
-      <Item key={x.objectID} item={x} />
-    ))}
+    {console.log(props.list)}
+    {props.list !== "" &&
+      props.list.map((x) => <Item key={x.objectID} item={x} />)}
   </ul>
 );
 
