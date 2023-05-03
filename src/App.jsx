@@ -1,9 +1,11 @@
 // import * as React from "react";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const App = () => {
-  const [searchTerm, setSearchterm] = useState("");
+  const [searchTerm, setSearchterm] = useState(
+    localStorage.getItem("search") || "React"
+  );
 
   const stories = [
     {
@@ -24,51 +26,54 @@ const App = () => {
     },
   ];
 
+  useEffect(() => {
+    localStorage.setItem("search", searchTerm);
+  }, [searchTerm]);
+
   const handleSearch = (event) => {
     setSearchterm(event.target.value);
   };
 
-  const filteredStories = stories.filter((x) => {
-    return x.title.includes(searchTerm);
-  });
+  const filteredStories = stories.filter((x) =>
+    x.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div>
       <h1>Dev Stories</h1>
-      <Search onSearch={handleSearch}></Search>
+      <Search onSearch={handleSearch} search={searchTerm}></Search>
       <hr />
       <List list={filteredStories} />
     </div>
   );
 };
 
-const List = (props) => (
+const List = ({ list }) => (
   <ul>
-    {console.log(props.list)}
-    {props.list !== "" &&
-      props.list.map((x) => <Item key={x.objectID} item={x} />)}
+    {list !== "" &&
+      list.map(({ objectID, ...item }) => <Item key={objectID} {...item} />)}
   </ul>
 );
 
-const Item = (props) => {
+const Item = ({ title, url, author, num_comments, points }) => {
   return (
     <li>
-      {props.item.title}
+      {title}
       <span>
-        <a href={props.item.url}>{props.item.title}</a>
+        <a href={url}>{title}</a>
       </span>
-      <span>{props.item.author}</span>
-      <span>{props.item.num_comments}</span>
-      <span>{props.item.points}</span>
+      <span>{author}</span>
+      <span>{num_comments}</span>
+      <span>{points}</span>
     </li>
   );
 };
 
-const Search = (props) => {
+const Search = ({ search, onSearch }) => {
   return (
     <div>
       <label htmlFor="search">Search: </label>
-      <input onChange={props.onSearch} type="text" id="search" />
+      <input onChange={onSearch} type="text" id="search" value={search} />
     </div>
   );
 };
