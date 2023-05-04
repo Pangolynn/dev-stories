@@ -2,10 +2,22 @@
 
 import { useEffect, useState } from "react";
 
+const useStorageState = (key, initialState) => {
+  const [value, setValue] = useState(localStorage.getItem(key) || initialState);
+  // set the initial state by accessing local Storage or initial state which is passed in
+
+  useEffect(() => {
+    // everytime the searchterm is updated (user types in search input) useffect
+    // will run, and update the localStorage to match React's internal state.
+    localStorage.setItem(key, value);
+  }, [key, value]);
+
+  // return an array to match the same way you could use useState hook
+  return [value, setValue];
+};
+
 const App = () => {
-  const [searchTerm, setSearchterm] = useState(
-    localStorage.getItem("search") || "React"
-  );
+  const [searchTerm, setSearchTerm] = useStorageState("search", "React");
 
   const stories = [
     {
@@ -26,12 +38,12 @@ const App = () => {
     },
   ];
 
-  useEffect(() => {
-    localStorage.setItem("search", searchTerm);
-  }, [searchTerm]);
+  // useEffect(() => {
+  //   localStorage.setItem("search", searchTerm);
+  // }, [searchTerm]);
 
   const handleSearch = (event) => {
-    setSearchterm(event.target.value);
+    setSearchTerm(event.target.value);
   };
 
   const filteredStories = stories.filter((x) =>
@@ -41,7 +53,13 @@ const App = () => {
   return (
     <div>
       <h1>Dev Stories</h1>
-      <Search onSearch={handleSearch} search={searchTerm}></Search>
+      <InputWithLabel
+        id="search"
+        label="Search:"
+        value={searchTerm}
+        onInputChange={handleSearch}
+        type="text"
+      />
       <hr />
       <List list={filteredStories} />
     </div>
@@ -69,11 +87,12 @@ const Item = ({ title, url, author, num_comments, points }) => {
   );
 };
 
-const Search = ({ search, onSearch }) => {
+const InputWithLabel = ({ id, label, value, onInputChange, type = "text" }) => {
   return (
     <div>
-      <label htmlFor="search">Search: </label>
-      <input onChange={onSearch} type="text" id="search" value={search} />
+      <label htmlFor={id}>{label} </label>
+      &nbsp;
+      <input onChange={onInputChange} type={type} id={id} value={value} />
     </div>
   );
 };
