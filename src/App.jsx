@@ -1,6 +1,9 @@
 // import * as React from "react";
+import Button from "./UI/Button";
 
 import { useEffect, useState } from "react";
+import RadioButton from "./UI/RadioButton";
+import Checkbox from "./UI/Checkbox";
 
 const useStorageState = (key, initialState) => {
   const [value, setValue] = useState(localStorage.getItem(key) || initialState);
@@ -18,6 +21,16 @@ const useStorageState = (key, initialState) => {
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState("search", "React");
+  const [radioValue, setRadioValue] = useState("false");
+
+  const onRadioChange = (e) => {
+    setRadioValue((val) => {
+      if (!val) {
+        e.target.checked = false;
+      }
+      return !val;
+    });
+  };
 
   const stories = [
     {
@@ -62,6 +75,13 @@ const App = () => {
       />
       <hr />
       <List list={filteredStories} />
+      <Button classes="one two">Click Me</Button>
+      <RadioButton
+        value={radioValue}
+        label="Test radio"
+        onClick={onRadioChange}
+      />
+      <Checkbox name="testCheck" label="Test Check" />
     </div>
   );
 };
