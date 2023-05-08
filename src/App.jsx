@@ -1,7 +1,7 @@
 // import * as React from "react";
 import Button from "./UI/Button";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import RadioButton from "./UI/RadioButton";
 import Checkbox from "./UI/Checkbox";
 
@@ -68,11 +68,13 @@ const App = () => {
       <h1>Dev Stories</h1>
       <InputWithLabel
         id="search"
-        label="Search:"
         value={searchTerm}
         onInputChange={handleSearch}
         type="text"
-      />
+        isFocused
+      >
+        Search:
+      </InputWithLabel>
       <hr />
       <List list={filteredStories} />
       <Button classes="one two">Click Me</Button>
@@ -107,12 +109,33 @@ const Item = ({ title, url, author, num_comments, points }) => {
   );
 };
 
-const InputWithLabel = ({ id, label, value, onInputChange, type = "text" }) => {
+const InputWithLabel = ({
+  id,
+  children,
+  value,
+  onInputChange,
+  type = "text",
+  isFocused,
+}) => {
+  const inputRef = useRef();
+
+  useEffect(() => {
+    if (isFocused && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isFocused, inputRef]);
+
   return (
     <div>
-      <label htmlFor={id}>{label} </label>
+      <label htmlFor={id}>{children} </label>
       &nbsp;
-      <input onChange={onInputChange} type={type} id={id} value={value} />
+      <input
+        ref={inputRef}
+        onChange={onInputChange}
+        type={type}
+        id={id}
+        value={value}
+      />
     </div>
   );
 };
