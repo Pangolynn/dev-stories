@@ -5,6 +5,25 @@ import React, { useEffect, useRef, useState } from "react";
 import RadioButton from "./UI/RadioButton";
 import Checkbox from "./UI/Checkbox";
 
+const initStories = [
+  {
+    title: "React",
+    url: "someUrl",
+    author: "author1",
+    num_comments: 3,
+    points: 4,
+    objectID: 0,
+  },
+  {
+    title: "Redux",
+    url: "url2",
+    author: "author2",
+    num_comments: 2,
+    points: 5,
+    objectID: 1,
+  },
+];
+
 const useStorageState = (key, initialState) => {
   const [value, setValue] = useState(localStorage.getItem(key) || initialState);
   // set the initial state by accessing local Storage or initial state which is passed in
@@ -22,6 +41,7 @@ const useStorageState = (key, initialState) => {
 const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState("search", "React");
   const [radioValue, setRadioValue] = useState("false");
+  const [stories, setStories] = useState(initStories);
 
   const onRadioChange = (e) => {
     setRadioValue((val) => {
@@ -32,28 +52,7 @@ const App = () => {
     });
   };
 
-  const stories = [
-    {
-      title: "React",
-      url: "someUrl",
-      author: "author1",
-      num_comments: 3,
-      points: 4,
-      objectID: 0,
-    },
-    {
-      title: "Redux",
-      url: "url2",
-      author: "author2",
-      num_comments: 2,
-      points: 5,
-      objectID: 1,
-    },
-  ];
 
-  // useEffect(() => {
-  //   localStorage.setItem("search", searchTerm);
-  // }, [searchTerm]);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -91,7 +90,7 @@ const App = () => {
 const List = ({ list }) => (
   <ul>
     {list !== "" &&
-      list.map(({ objectID, ...item }) => <Item key={objectID} {...item} />)}
+      list.map(({ objectID, ...item }) => <><Item key={objectID} {...item} /><Button>Delete</Button></>)}
   </ul>
 );
 
