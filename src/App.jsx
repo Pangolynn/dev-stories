@@ -24,6 +24,10 @@ const initStories = [
   },
 ];
 
+const getAsyncStories = () => {
+  return Promise.resolve({ data: { stories: initStories } });
+};
+
 const useStorageState = (key, initialState) => {
   const [value, setValue] = useState(localStorage.getItem(key) || initialState);
   // set the initial state by accessing local Storage or initial state which is passed in
@@ -41,7 +45,13 @@ const useStorageState = (key, initialState) => {
 const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState("search", "React");
   const [radioValue, setRadioValue] = useState("false");
-  const [stories, setStories] = useState(initStories);
+  const [stories, setStories] = useState([]);
+
+  useEffect(() => {
+    getAsyncStories().then((result) => {
+      setStories(result.data.stories);
+    });
+  }, []);
 
   const onRadioChange = (e) => {
     setRadioValue((val) => {
@@ -52,8 +62,6 @@ const App = () => {
     });
   };
 
-
-
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
@@ -61,6 +69,14 @@ const App = () => {
   const filteredStories = stories.filter((x) =>
     x.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleRemoveStory = (item) => {
+    const newStories = stories.filter((story) => {
+      return item.objectID !== story.objectID;
+    });
+
+    setStories(newStories);
+  };
 
   return (
     <div>
@@ -75,7 +91,7 @@ const App = () => {
         Search:
       </InputWithLabel>
       <hr />
-      <List list={filteredStories} />
+      <List list={filteredStories} onRemoveItem={handleRemoveStory} />
       <Button classes="one two">Click Me</Button>
       <RadioButton
         value={radioValue}
@@ -87,23 +103,32 @@ const App = () => {
   );
 };
 
-const List = ({ list }) => (
+const List = ({ list, onRemoveItem }) => (
   <ul>
     {list !== "" &&
-      list.map(({ objectID, ...item }) => <><Item key={objectID} {...item} /><Button>Delete</Button></>)}
+      list.map((item) => (
+        <>
+          <Item key={item.objectID} item={item} onRemoveItem={onRemoveItem} />
+        </>
+      ))}
   </ul>
 );
 
-const Item = ({ title, url, author, num_comments, points }) => {
+const Item = ({ item, onRemoveItem }) => {
   return (
     <li>
-      {title}
+      {item.title}
       <span>
-        <a href={url}>{title}</a>
+        <a href={item.url}>{item.title}</a>
       </span>
-      <span>{author}</span>
-      <span>{num_comments}</span>
-      <span>{points}</span>
+      <span>{item.author}</span>
+      <span>{item.num_comments}</span>
+      <span>{item.points}</span>
+      <span>
+        <Button type="button" onClick={() => onRemoveItem(item)}>
+          Remove
+        </Button>
+      </span>
     </li>
   );
 };
