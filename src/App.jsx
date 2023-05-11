@@ -24,9 +24,10 @@ const initStories = [
   },
 ];
 
-const getAsyncStories = () => {
-  return Promise.resolve({ data: { stories: initStories } });
-};
+const getAsyncStories = () =>
+  new Promise((resolve) =>
+    setTimeout(() => resolve({ data: { stories: initStories } }), 2000)
+  );
 
 const useStorageState = (key, initialState) => {
   const [value, setValue] = useState(localStorage.getItem(key) || initialState);
@@ -46,11 +47,17 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState("search", "React");
   const [radioValue, setRadioValue] = useState("false");
   const [stories, setStories] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+  const [isError, setError] = useState(false);
 
   useEffect(() => {
-    getAsyncStories().then((result) => {
-      setStories(result.data.stories);
-    });
+    setLoading(true);
+    getAsyncStories()
+      .then((result) => {
+        setStories(result.data.stories);
+        setLoading(false);
+      })
+      .catch(() => setError(true));
   }, []);
 
   const onRadioChange = (e) => {
@@ -91,7 +98,13 @@ const App = () => {
         Search:
       </InputWithLabel>
       <hr />
-      <List list={filteredStories} onRemoveItem={handleRemoveStory} />
+
+      {isError && <p>Something went wrong.</p>}
+      {isLoading ? (
+        <p>Loading</p>
+      ) : (
+        <List list={filteredStories} onRemoveItem={handleRemoveStory} />
+      )}
       <Button classes="one two">Click Me</Button>
       <RadioButton
         value={radioValue}
