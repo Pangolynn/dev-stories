@@ -29,6 +29,18 @@ const getAsyncStories = () =>
     setTimeout(() => resolve({ data: { stories: initStories } }), 2000)
   );
 
+
+  // reducers come w/ an action and a payload
+const storiesReducer = (state, action) => {
+   if(action.type === 'SET_STORIES') {
+    // if action matches, return a new state
+    return action.payload;
+   } else {
+    throw new Error();
+   }
+};
+
+
 const useStorageState = (key, initialState) => {
   const [value, setValue] = useState(localStorage.getItem(key) || initialState);
   // set the initial state by accessing local Storage or initial state which is passed in
@@ -47,6 +59,7 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState("search", "React");
   const [radioValue, setRadioValue] = useState("false");
   const [stories, setStories] = useState([]);
+  // const [stories, dispatchStories] = React.useReducer(storiesReducer, []);
   const [isLoading, setLoading] = useState(false);
   const [isError, setError] = useState(false);
 
