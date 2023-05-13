@@ -24,22 +24,28 @@ const initStories = [
   },
 ];
 
+const SET_STORIES = "SET_STORIES";
+const REMOVE_STORY = "REMOVE_STORY";
+
 const getAsyncStories = () =>
   new Promise((resolve) =>
     setTimeout(() => resolve({ data: { stories: initStories } }), 2000)
   );
 
-
-  // reducers come w/ an action and a payload
+// reducers come w/ a current state, and an action which comes with type/payload
 const storiesReducer = (state, action) => {
-   if(action.type === 'SET_STORIES') {
-    // if action matches, return a new state
-    return action.payload;
-   } else {
-    throw new Error();
-   }
+  switch (action.type) {
+    case SET_STORIES:
+      // if action matches, return a new state
+      return action.payload;
+    case REMOVE_STORY:
+      return state.filter(
+        (story) => action.payload.objectID !== story.objectID
+      );
+    default:
+      throw new Error();
+  }
 };
-
 
 const useStorageState = (key, initialState) => {
   const [value, setValue] = useState(localStorage.getItem(key) || initialState);
@@ -58,8 +64,8 @@ const useStorageState = (key, initialState) => {
 const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState("search", "React");
   const [radioValue, setRadioValue] = useState("false");
-  const [stories, setStories] = useState([]);
-  // const [stories, dispatchStories] = React.useReducer(storiesReducer, []);
+  // const [stories, setStories] = useState([]);
+  const [stories, dispatchStories] = React.useReducer(storiesReducer, []);
   const [isLoading, setLoading] = useState(false);
   const [isError, setError] = useState(false);
 
@@ -67,7 +73,10 @@ const App = () => {
     setLoading(true);
     getAsyncStories()
       .then((result) => {
-        setStories(result.data.stories);
+        dispatchStories({
+          type: SET_STORIES,
+          payload: result.data.stories,
+        });
         setLoading(false);
       })
       .catch(() => setError(true));
@@ -91,11 +100,10 @@ const App = () => {
   );
 
   const handleRemoveStory = (item) => {
-    const newStories = stories.filter((story) => {
-      return item.objectID !== story.objectID;
+    dispatchStories({
+      type: REMOVE_STORY,
+      payload: item,
     });
-
-    setStories(newStories);
   };
 
   return (
