@@ -24,24 +24,44 @@ const initStories = [
   },
 ];
 
-const SET_STORIES = "SET_STORIES";
 const REMOVE_STORY = "REMOVE_STORY";
 
 const getAsyncStories = () =>
   new Promise((resolve) =>
     setTimeout(() => resolve({ data: { stories: initStories } }), 2000)
   );
+// new Promise((resolve, reject) => setTimeout(reject("hm"), 2000));
 
 // reducers come w/ a current state, and an action which comes with type/payload
 const storiesReducer = (state, action) => {
   switch (action.type) {
-    case SET_STORIES:
+    case "STORIES_FETCH_INIT":
       // if action matches, return a new state
-      return action.payload;
+      return {
+        ...state,
+        isLoading: true,
+        isError: false,
+      };
+    case "STORIES_FETCH_SUCCESS":
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        data: action.payload,
+      };
+    case "STORIES_FETCH_FAILURE":
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+      };
     case REMOVE_STORY:
-      return state.filter(
-        (story) => action.payload.objectID !== story.objectID
-      );
+      return {
+        ...state,
+        data: state.data.filter(
+          (story) => action.payload.objectID !== story.objectID
+        ),
+      };
     default:
       throw new Error();
   }
@@ -64,22 +84,31 @@ const useStorageState = (key, initialState) => {
 const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState("search", "React");
   const [radioValue, setRadioValue] = useState("false");
-  // const [stories, setStories] = useState([]);
-  const [stories, dispatchStories] = React.useReducer(storiesReducer, []);
-  const [isLoading, setLoading] = useState(false);
-  const [isError, setError] = useState(false);
+  // const [stories, dispatchStories] = React.useReducer(storiesReducer, []);
+  // const [isLoading, setLoading] = useState(false);
+  // const [isError, setError] = useState(false);
+
+  const [stories, dispatchStories] = React.useReducer(storiesReducer, {
+    data: [],
+    isLoading: false,
+    isError: false,
+  });
 
   useEffect(() => {
-    setLoading(true);
+    // setLoading(true);
+    dispatchStories({ type: "STORIES_FETCH_INIT" });
+
     getAsyncStories()
       .then((result) => {
         dispatchStories({
-          type: SET_STORIES,
+          type: "STORIES_FETCH_SUCCESS",
           payload: result.data.stories,
         });
-        setLoading(false);
+        // setLoading(false);
       })
-      .catch(() => setError(true));
+      .catch(() => {
+        dispatchStories({ type: "STORIES_FETCH_FAILURE" });
+      });
   }, []);
 
   const onRadioChange = (e) => {
