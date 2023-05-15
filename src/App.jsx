@@ -30,13 +30,13 @@ const getAsyncStories = () =>
   new Promise((resolve) =>
     setTimeout(() => resolve({ data: { stories: initStories } }), 2000)
   );
+// use this line to emulate a rejection/failure to fetch data
 // new Promise((resolve, reject) => setTimeout(reject("hm"), 2000));
 
 // reducers come w/ a current state, and an action which comes with type/payload
 const storiesReducer = (state, action) => {
   switch (action.type) {
     case "STORIES_FETCH_INIT":
-      // if action matches, return a new state
       return {
         ...state,
         isLoading: true,
@@ -104,7 +104,6 @@ const App = () => {
           type: "STORIES_FETCH_SUCCESS",
           payload: result.data.stories,
         });
-        // setLoading(false);
       })
       .catch(() => {
         dispatchStories({ type: "STORIES_FETCH_FAILURE" });
@@ -124,7 +123,7 @@ const App = () => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredStories = stories.filter((x) =>
+  const filteredStories = stories.data.filter((x) =>
     x.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -149,8 +148,8 @@ const App = () => {
       </InputWithLabel>
       <hr />
 
-      {isError && <p>Something went wrong.</p>}
-      {isLoading ? (
+      {stories.isError && <p>Something went wrong.</p>}
+      {stories.isLoading ? (
         <p>Loading</p>
       ) : (
         <List list={filteredStories} onRemoveItem={handleRemoveStory} />
