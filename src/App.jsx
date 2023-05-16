@@ -5,33 +5,10 @@ import React, { useEffect, useRef, useState } from "react";
 import RadioButton from "./UI/RadioButton";
 import Checkbox from "./UI/Checkbox";
 
-const initStories = [
-  {
-    title: "React",
-    url: "someUrl",
-    author: "author1",
-    num_comments: 3,
-    points: 4,
-    objectID: 0,
-  },
-  {
-    title: "Redux",
-    url: "url2",
-    author: "author2",
-    num_comments: 2,
-    points: 5,
-    objectID: 1,
-  },
-];
+const API_ENDPOINT = "https://hn.algolia.com/api/v1/search?query=";
 
+/* storiesReducer action types */
 const REMOVE_STORY = "REMOVE_STORY";
-
-const getAsyncStories = () =>
-  new Promise((resolve) =>
-    setTimeout(() => resolve({ data: { stories: initStories } }), 2000)
-  );
-// use this line to emulate a rejection/failure to fetch data
-// new Promise((resolve, reject) => setTimeout(reject("hm"), 2000));
 
 // reducers come w/ a current state, and an action which comes with type/payload
 const storiesReducer = (state, action) => {
@@ -84,9 +61,6 @@ const useStorageState = (key, initialState) => {
 const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState("search", "React");
   const [radioValue, setRadioValue] = useState("false");
-  // const [stories, dispatchStories] = React.useReducer(storiesReducer, []);
-  // const [isLoading, setLoading] = useState(false);
-  // const [isError, setError] = useState(false);
 
   const [stories, dispatchStories] = React.useReducer(storiesReducer, {
     data: [],
@@ -95,14 +69,14 @@ const App = () => {
   });
 
   useEffect(() => {
-    // setLoading(true);
     dispatchStories({ type: "STORIES_FETCH_INIT" });
 
-    getAsyncStories()
+    fetch(`${API_ENDPOINT}react`)
+      .then((response) => response.json())
       .then((result) => {
         dispatchStories({
           type: "STORIES_FETCH_SUCCESS",
-          payload: result.data.stories,
+          payload: result.hits,
         });
       })
       .catch(() => {
