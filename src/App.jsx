@@ -68,10 +68,22 @@ const App = () => {
     isError: false,
   });
 
+  const onRadioChange = (e) => {
+    setRadioValue((val) => {
+      if (!val) {
+        e.target.checked = false;
+      }
+      return !val;
+    });
+  };
+
   useEffect(() => {
+    // if searchTerm is not present: null, empty str, undefined, do nothing
+    if (!searchTerm) return;
+
     dispatchStories({ type: "STORIES_FETCH_INIT" });
 
-    fetch(`${API_ENDPOINT}react`)
+    fetch(`${API_ENDPOINT}${searchTerm}`)
       .then((response) => response.json())
       .then((result) => {
         dispatchStories({
@@ -82,24 +94,11 @@ const App = () => {
       .catch(() => {
         dispatchStories({ type: "STORIES_FETCH_FAILURE" });
       });
-  }, []);
-
-  const onRadioChange = (e) => {
-    setRadioValue((val) => {
-      if (!val) {
-        e.target.checked = false;
-      }
-      return !val;
-    });
-  };
+  }, [searchTerm]);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
-
-  const filteredStories = stories.data.filter((x) =>
-    x.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   const handleRemoveStory = (item) => {
     dispatchStories({
@@ -107,6 +106,13 @@ const App = () => {
       payload: item,
     });
   };
+
+  // const filteredStories = stories.data.filter((x) => {
+  //   console.log(stories);
+  //   console.log(searchTerm);
+
+  //   return x.title.toLowerCase().includes(searchTerm.toLowerCase());
+  // });
 
   return (
     <div>
@@ -126,7 +132,7 @@ const App = () => {
       {stories.isLoading ? (
         <p>Loading</p>
       ) : (
-        <List list={filteredStories} onRemoveItem={handleRemoveStory} />
+        <List list={stories.data} onRemoveItem={handleRemoveStory} />
       )}
       <Button classes="one two">Click Me</Button>
       <RadioButton
