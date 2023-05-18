@@ -1,7 +1,7 @@
 // import * as React from "react";
 import Button from "./UI/Button";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import RadioButton from "./UI/RadioButton";
 import Checkbox from "./UI/Checkbox";
 
@@ -77,7 +77,7 @@ const App = () => {
     });
   };
 
-  useEffect(() => {
+  const handleFetchStories = useCallback(() => {
     // if searchTerm is not present: null, empty str, undefined, do nothing
     if (!searchTerm) return;
 
@@ -95,6 +95,10 @@ const App = () => {
         dispatchStories({ type: "STORIES_FETCH_FAILURE" });
       });
   }, [searchTerm]);
+
+  useEffect(() => {
+    handleFetchStories();
+  }, [handleFetchStories]);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
