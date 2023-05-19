@@ -68,6 +68,8 @@ const App = () => {
     isError: false,
   });
 
+  const [url, setUrl] = useState(`${API_ENDPOINT}${searchTerm}`);
+
   const onRadioChange = (e) => {
     setRadioValue((val) => {
       if (!val) {
@@ -78,12 +80,9 @@ const App = () => {
   };
 
   const handleFetchStories = useCallback(() => {
-    // if searchTerm is not present: null, empty str, undefined, do nothing
-    if (!searchTerm) return;
-
     dispatchStories({ type: "STORIES_FETCH_INIT" });
 
-    fetch(`${API_ENDPOINT}${searchTerm}`)
+    fetch(url)
       .then((response) => response.json())
       .then((result) => {
         dispatchStories({
@@ -94,14 +93,18 @@ const App = () => {
       .catch(() => {
         dispatchStories({ type: "STORIES_FETCH_FAILURE" });
       });
-  }, [searchTerm]);
+  }, [url]);
 
   useEffect(() => {
     handleFetchStories();
   }, [handleFetchStories]);
 
-  const handleSearch = (event) => {
+  const handleSearchInput = (event) => {
     setSearchTerm(event.target.value);
+  };
+
+  const handleSearchSubmit = () => {
+    setUrl(`${API_ENDPOINT}${searchTerm}`);
   };
 
   const handleRemoveStory = (item) => {
@@ -111,25 +114,21 @@ const App = () => {
     });
   };
 
-  // const filteredStories = stories.data.filter((x) => {
-  //   console.log(stories);
-  //   console.log(searchTerm);
-
-  //   return x.title.toLowerCase().includes(searchTerm.toLowerCase());
-  // });
-
   return (
     <div>
       <h1>Dev Stories</h1>
       <InputWithLabel
         id="search"
         value={searchTerm}
-        onInputChange={handleSearch}
+        onInputChange={handleSearchInput}
         type="text"
         isFocused
       >
         Search:
       </InputWithLabel>
+      <button type="button" disabled={!searchTerm} onClick={handleSearchSubmit}>
+        Submit
+      </button>
       <hr />
 
       {stories.isError && <p>Something went wrong.</p>}
