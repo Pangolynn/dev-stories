@@ -80,20 +80,19 @@ const App = () => {
     });
   };
 
-  const handleFetchStories = useCallback(() => {
+  const handleFetchStories = useCallback(async () => {
     dispatchStories({ type: "STORIES_FETCH_INIT" });
 
-    axios
-      .get(url)
-      .then((result) => {
-        dispatchStories({
-          type: "STORIES_FETCH_SUCCESS",
-          payload: result.data.hits,
-        });
-      })
-      .catch(() => {
-        dispatchStories({ type: "STORIES_FETCH_FAILURE" });
+    try {
+      const result = await axios.get(url);
+
+      dispatchStories({
+        type: "STORIES_FETCH_SUCCESS",
+        payload: result.data.hits,
       });
+    } catch {
+      dispatchStories({ type: "STORIES_FETCH_FAILURE" });
+    }
   }, [url]);
 
   useEffect(() => {
@@ -104,8 +103,10 @@ const App = () => {
     setSearchTerm(event.target.value);
   };
 
-  const handleSearchSubmit = () => {
+  const handleSearchSubmit = (event) => {
     setUrl(`${API_ENDPOINT}${searchTerm}`);
+
+    event.preventDefault();
   };
 
   const handleRemoveStory = (item) => {
@@ -118,18 +119,11 @@ const App = () => {
   return (
     <div>
       <h1>Dev Stories</h1>
-      <InputWithLabel
-        id="search"
-        value={searchTerm}
-        onInputChange={handleSearchInput}
-        type="text"
-        isFocused
-      >
-        Search:
-      </InputWithLabel>
-      <button type="button" disabled={!searchTerm} onClick={handleSearchSubmit}>
-        Submit
-      </button>
+      <SearchForm
+        searchTerm={searchTerm}
+        onSearchInput={handleSearchInput}
+        onSearchSubmit={handleSearchSubmit}
+      />
       <hr />
 
       {stories.isError && <p>Something went wrong.</p>}
@@ -148,6 +142,23 @@ const App = () => {
     </div>
   );
 };
+
+const SearchForm = ({ searchTerm, onSearchInput, onSearchSubmit }) => (
+  <form onSubmit={onSearchSubmit}>
+    <InputWithLabel
+      id="search"
+      value={searchTerm}
+      onInputChange={onSearchInput}
+      type="text"
+      isFocused
+    >
+      Search:
+    </InputWithLabel>
+    <button type="submit" disabled={!searchTerm}>
+      Submit
+    </button>
+  </form>
+);
 
 const List = ({ list, onRemoveItem }) => (
   <ul>
