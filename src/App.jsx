@@ -1,5 +1,6 @@
 // import * as React from "react";
 import axios from "axios";
+import "./App.css";
 import Button from "./UI/Button";
 
 import React, { useCallback, useEffect, useState } from "react";
@@ -120,14 +121,14 @@ const App = () => {
   };
 
   return (
-    <div>
-      <h1>Dev Stories</h1>
+    <div className="container">
+      <h1 className="headline-primary">Dev Stories</h1>
+
       <SearchForm
         searchTerm={searchTerm}
         onSearchInput={handleSearchInput}
         onSearchSubmit={handleSearchSubmit}
       />
-      <hr />
 
       {stories.isError && <p>Something went wrong.</p>}
       {stories.isLoading ? (
