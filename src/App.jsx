@@ -128,6 +128,7 @@ const App = () => {
         searchTerm={searchTerm}
         onSearchInput={handleSearchInput}
         onSearchSubmit={handleSearchSubmit}
+        className="button_large"
       />
 
       {stories.isError && <p>Something went wrong.</p>}

@@ -1,7 +1,12 @@
 import InputWithLabel from "../UI/InputWithLabel";
 
-const SearchForm = ({ searchTerm, onSearchInput, onSearchSubmit }) => (
-  <form onSubmit={onSearchSubmit}>
+const SearchForm = ({
+  searchTerm,
+  onSearchInput,
+  onSearchSubmit,
+  className,
+}) => (
+  <form className="search-form" onSubmit={onSearchSubmit}>
     <InputWithLabel
       id="search"
       value={searchTerm}
@@ -11,7 +16,11 @@ const SearchForm = ({ searchTerm, onSearchInput, onSearchSubmit }) => (
     >
       Search:
     </InputWithLabel>
-    <button type="submit" disabled={!searchTerm}>
+    <button
+      className={`button ${className}`}
+      type="submit"
+      disabled={!searchTerm}
+    >
       Submit
     </button>
   </form>

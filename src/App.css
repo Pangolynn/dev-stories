@@ -13,3 +13,67 @@
   font-weight: 300;
   letter-spacing: 2px;
 }
+
+/* Item */
+.item {
+  display: flex;
+  align-items: center;
+  padding-bottom: 5px;
+}
+
+.item > span {
+  padding: 0 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.item > span > a {
+  color: inherit;
+}
+
+/* Button */
+.button {
+  background: transparent;
+  border: 1px solid #171212;
+  padding: 5px;
+  cursor: pointer;
+  transition: all 0.1s ease-in;
+}
+
+.button:hover {
+  background: #171212;
+  color: #ffffff;
+}
+
+.button_small {
+  padding: 5px;
+}
+
+.button_large {
+  padding: 10px;
+}
+
+/* Search Form */
+.search-form {
+  padding: 10px 0 20px 0;
+  display: flex;
+  align-items: baseline;
+}
+
+/* Input with label */
+.label {
+  border-top: 3px solid #171212;
+  border-left: 3px solid #171212;
+  padding-left: 5px;
+  font-size: 24px;
+}
+
+.input {
+  border: none;
+  border-bottom: 3px solid #171212;
+  background-color: transparent;
+  font-size: 24px;
+  margin-right: 10px;
+}
