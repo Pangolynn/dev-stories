@@ -1,6 +1,6 @@
 // import * as React from "react";
 import axios from "axios";
-import "./App.css";
+import styles from "./App.module.css";
 import Button from "./UI/Button";
 
 import React, { useCallback, useEffect, useState } from "react";
@@ -121,8 +121,8 @@ const App = () => {
   };
 
   return (
-    <div className="container">
-      <h1 className="headline-primary">Dev Stories</h1>
+    <div className={styles.container}>
+      <h1 className={styles.headlinePrimary}>Dev Stories</h1>
 
       <SearchForm
         searchTerm={searchTerm}

@@ -1,4 +1,5 @@
 import InputWithLabel from "../UI/InputWithLabel";
+import styles from "../App.module.css";
 
 const SearchForm = ({
   searchTerm,
@@ -6,7 +7,7 @@ const SearchForm = ({
   onSearchSubmit,
   className,
 }) => (
-  <form className="search-form" onSubmit={onSearchSubmit}>
+  <form className={styles.searchForm} onSubmit={onSearchSubmit}>
     <InputWithLabel
       id="search"
       value={searchTerm}
@@ -17,7 +18,7 @@ const SearchForm = ({
       Search:
     </InputWithLabel>
     <button
-      className={`button ${className}`}
+      className={`${styles.button} ${styles.className}`}
       type="submit"
       disabled={!searchTerm}
     >

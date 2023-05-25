@@ -1,9 +1,9 @@
 import Button from "../UI/Button";
-// import "./Item.css";
+import styles from "../App.module.css";
 
 const Item = ({ item, onRemoveItem }) => {
   return (
-    <li className="item">
+    <li className={styles.item}>
       <span style={{ width: "40%" }}>
         <a href={item.url}>{item.title}</a>
       </span>
@@ -15,7 +15,7 @@ const Item = ({ item, onRemoveItem }) => {
         <Button
           type="button"
           onClick={() => onRemoveItem(item)}
-          className="button button_small"
+          className={`${styles.button} ${styles.buttonSmall}`}
         >
           Remove
         </Button>
