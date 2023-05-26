@@ -17,7 +17,7 @@ const Item = ({ item, onRemoveItem }) => {
           onClick={() => onRemoveItem(item)}
           className={`${styles.button} ${styles.buttonSmall}`}
         >
-          Remove
+          Dismiss
         </Button>
       </span>
     </li>

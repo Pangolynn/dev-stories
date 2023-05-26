@@ -1,6 +1,7 @@
 // import * as React from "react";
 import axios from "axios";
 import styles from "./App.module.css";
+import { ReactComponent as Github } from "./github.svg";
 import Button from "./UI/Button";
 
 import React, { useCallback, useEffect, useState } from "react";
@@ -122,7 +123,10 @@ const App = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.headlinePrimary}>Dev Stories</h1>
+      <h1 className={styles.headlinePrimary}>
+        <Github height="18px" width="18px" />
+        Dev Stories
+      </h1>
 
       <SearchForm
         searchTerm={searchTerm}
