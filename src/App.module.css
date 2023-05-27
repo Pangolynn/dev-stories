@@ -55,6 +55,11 @@
   padding: 10px;
 }
 
+svg:hover > g {
+  fill: #ffffff;
+  stroke: #ffffff;
+}
+
 /* Search Form */
 .searchForm {
   padding: 10px 0 20px 0;
