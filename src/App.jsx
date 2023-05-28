@@ -1,12 +1,16 @@
-// import * as React from "react";
 import axios from "axios";
+import React, { useCallback, useEffect, useState } from "react";
+
+// Styling
 import styles from "./App.module.css";
 import { ReactComponent as Github } from "./github.svg";
-import Button from "./UI/Button";
 
-import React, { useCallback, useEffect, useState } from "react";
+// UI Components
+import Button from "./UI/Button";
 import RadioButton from "./UI/RadioButton";
 import Checkbox from "./UI/Checkbox";
+
+// Components
 import List from "./components/List";
 import SearchForm from "./components/SearchForm";
 
@@ -132,7 +136,7 @@ const App = () => {
         searchTerm={searchTerm}
         onSearchInput={handleSearchInput}
         onSearchSubmit={handleSearchSubmit}
-        className="button_large"
+        className="button-large"
       />
 
       {stories.isError && <p>Something went wrong.</p>}

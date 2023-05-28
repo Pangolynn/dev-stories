@@ -1,5 +1,7 @@
-import InputWithLabel from "../UI/InputWithLabel";
 import styles from "../App.module.css";
+
+import InputWithLabel from "../UI/InputWithLabel";
+import Button from "../UI/Button";
 
 const SearchForm = ({
   searchTerm,
@@ -17,13 +19,9 @@ const SearchForm = ({
     >
       Search:
     </InputWithLabel>
-    <button
-      className={`${styles.button} ${styles.className}`}
-      type="submit"
-      disabled={!searchTerm}
-    >
+    <Button className={className} type="submit" disabled={!searchTerm}>
       Submit
-    </button>
+    </Button>
   </form>
 );
 
