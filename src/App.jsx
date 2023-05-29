@@ -57,11 +57,17 @@ const storiesReducer = (state, action) => {
 };
 
 const useStorageState = (key, initialState) => {
+  const isMounted = React.useRef(false);
+
   const [value, setValue] = useState(localStorage.getItem(key) || initialState);
   // set the initial state by accessing local Storage or initial state which is passed in
 
   useEffect(() => {
-    localStorage.setItem(key, value);
+    if (!isMounted.current) {
+      isMounted.current = true;
+    } else {
+      localStorage.setItem(key, value);
+    }
   }, [key, value]);
 
   // return an array to match the same way you could use useState hook
