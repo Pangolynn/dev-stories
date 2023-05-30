@@ -124,12 +124,12 @@ const App = () => {
     event.preventDefault();
   };
 
-  const handleRemoveStory = (item) => {
+  const handleRemoveStory = useCallback((item) => {
     dispatchStories({
       type: REMOVE_STORY,
       payload: item,
     });
-  };
+  }, []);
 
   return (
     <div className={styles.container}>
