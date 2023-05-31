@@ -74,6 +74,12 @@ const useStorageState = (key, initialState) => {
   return [value, setValue];
 };
 
+const getSumComments = (stories) => {
+  console.log("C");
+
+  return stories.data.reduce((result, value) => result + value.num_comments, 0);
+};
+
 const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState("search", "React");
   const [radioValue, setRadioValue] = useState("false");
@@ -131,11 +137,13 @@ const App = () => {
     });
   }, []);
 
+  const sumComments = getSumComments(stories);
+
   return (
     <div className={styles.container}>
       <h1 className={styles.headlinePrimary}>
         <Github height="18px" width="18px" />
-        Dev Stories
+        Dev Stories with {sumComments}
       </h1>
 
       <SearchForm
