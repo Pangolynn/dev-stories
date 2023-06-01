@@ -56,7 +56,7 @@ const storiesReducer = (state, action) => {
   }
 };
 
-const useStorageState = (key, initialState) => {
+const useStorageState = (key: string, initialState: string) => {
   const isMounted = React.useRef(false);
 
   const [value, setValue] = useState(localStorage.getItem(key) || initialState);
@@ -137,7 +137,7 @@ const App = () => {
     });
   }, []);
 
-  const sumComments = getSumComments(stories);
+  const sumComments = React.useMemo(() => getSumComments(stories), [stories]);
 
   return (
     <div className={styles.container}>
