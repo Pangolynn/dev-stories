@@ -56,7 +56,10 @@ const storiesReducer = (state, action) => {
   }
 };
 
-const useStorageState = (key: string, initialState: string) => {
+const useStorageState = (
+  key: string,
+  initialState: string
+): [string, (newValue: string) => void] => {
   const isMounted = React.useRef(false);
 
   const [value, setValue] = useState(localStorage.getItem(key) || initialState);

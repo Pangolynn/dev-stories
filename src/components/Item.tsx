@@ -1,7 +1,27 @@
 import Button from "../UI/Button";
 import styles from "../App.module.css";
 
-const Item = ({ item, onRemoveItem }) => {
+const Item = ({
+  item,
+  onRemoveItem,
+}: {
+  item: {
+    objectID: string;
+    url: string;
+    title: string;
+    author: string;
+    num_comments: number;
+    points: number;
+  };
+  onRemoveItem: (item: {
+    objectID: string;
+    url: string;
+    title: string;
+    author: string;
+    num_comments: number;
+    points: number;
+  }) => void;
+}) => {
   return (
     <li className={styles.item}>
       <span style={{ width: "40%" }}>
