@@ -22,8 +22,51 @@ const STORIES_FETCH_INIT = "STORIES_FETCH_INIT";
 const STORIES_FETCH_SUCCESS = "STORIES_FETCH_SUCCESS";
 const STORIES_FETCH_FAILURE = "STORIES_FETCH_FAILURE";
 
+type Story = {
+  objectId: string;
+  url: string;
+  title: string;
+  author: string;
+  num_comments: number;
+  points: number;
+};
+
+type Stories = Story[];
+
+type StoriesState = {
+  data: Stories;
+  isLoading: boolean;
+  isError: boolean;
+};
+
+type StoriesFetchInitAction = {
+  type: "STORIES_FETCH_INIT";
+};
+
+type StoriesFetchSuccessAction = {
+  type: "STORIES_FETCH_SUCCESS";
+  payload: Stories;
+};
+
+type StoriesFetchFailureAction = {
+  type: "STORIES_FETCH_FAILURE";
+};
+
+type StoriesRemoveAction = {
+  type: "REMOVE_STORY";
+  payload: Story;
+};
+
+type StoriesAction =
+  | StoriesFetchInitAction
+  | StoriesFetchSuccessAction
+  | StoriesFetchFailureAction
+  | StoriesRemoveAction;
+
+export type { Story, Stories };
+
 // reducers come w/ a current state, and an action which comes with type/payload
-const storiesReducer = (state, action) => {
+const storiesReducer = (state: StoriesState, action: StoriesAction) => {
   switch (action.type) {
     case STORIES_FETCH_INIT:
       return {
@@ -123,17 +166,17 @@ const App = () => {
     handleFetchStories();
   }, [handleFetchStories]);
 
-  const handleSearchInput = (event) => {
+  const handleSearchInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
-  const handleSearchSubmit = (event) => {
+  const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     setUrl(`${API_ENDPOINT}${searchTerm}`);
 
     event.preventDefault();
   };
 
-  const handleRemoveStory = useCallback((item) => {
+  const handleRemoveStory = useCallback((item: Story) => {
     dispatchStories({
       type: REMOVE_STORY,
       payload: item,
@@ -162,7 +205,7 @@ const App = () => {
       ) : (
         <List list={stories.data} onRemoveItem={handleRemoveStory} />
       )}
-      <Button classes="one two">Click Me</Button>
+      <Button>Click Me</Button>
       <RadioButton
         value={radioValue}
         label="Test radio"

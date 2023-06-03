@@ -1,6 +1,20 @@
 import styles from "../App.module.css";
 
-const Button = ({ type = "button", onClick, className, children, ...rest }) => {
+type ButtonProps = {
+  type?: "submit" | "reset" | "button" | undefined;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void | undefined;
+  className?: string;
+  children?: React.ReactNode | undefined;
+  disabled?: boolean;
+};
+
+const Button: React.FC<ButtonProps> = ({
+  type = "button",
+  onClick,
+  className = "",
+  children,
+  ...rest
+}) => {
   return (
     <button
       type={type}

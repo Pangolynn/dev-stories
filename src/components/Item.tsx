@@ -1,27 +1,13 @@
 import Button from "../UI/Button";
 import styles from "../App.module.css";
+import { Story } from "../App";
 
-const Item = ({
-  item,
-  onRemoveItem,
-}: {
-  item: {
-    objectID: string;
-    url: string;
-    title: string;
-    author: string;
-    num_comments: number;
-    points: number;
-  };
-  onRemoveItem: (item: {
-    objectID: string;
-    url: string;
-    title: string;
-    author: string;
-    num_comments: number;
-    points: number;
-  }) => void;
-}) => {
+type ItemProps = {
+  item: Story;
+  onRemoveItem: (item: Story) => void;
+};
+
+const Item: React.FC<ItemProps> = ({ item, onRemoveItem }) => {
   return (
     <li className={styles.item}>
       <span style={{ width: "40%" }}>

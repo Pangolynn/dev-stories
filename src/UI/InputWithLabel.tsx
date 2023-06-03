@@ -1,7 +1,16 @@
 import { useEffect, useRef } from "react";
 import styles from "../App.module.css";
 
-const InputWithLabel = ({
+type InputWithLabelProps = {
+  id: string;
+  value: string;
+  type?: string;
+  onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  isFocused?: boolean;
+  children: React.ReactNode;
+};
+
+const InputWithLabel: React.FC<InputWithLabelProps> = ({
   id,
   children,
   value,
@@ -9,7 +18,7 @@ const InputWithLabel = ({
   type = "text",
   isFocused,
 }) => {
-  const inputRef = useRef();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isFocused && inputRef.current) {

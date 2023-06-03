@@ -3,7 +3,14 @@ import styles from "../App.module.css";
 import InputWithLabel from "../UI/InputWithLabel";
 import Button from "../UI/Button";
 
-const SearchForm = ({
+type SearchFormProps = {
+  searchTerm: string;
+  onSearchInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onSearchSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  className: string;
+};
+
+const SearchForm: React.FC<SearchFormProps> = ({
   searchTerm,
   onSearchInput,
   onSearchSubmit,
