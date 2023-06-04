@@ -23,7 +23,7 @@ const STORIES_FETCH_SUCCESS = "STORIES_FETCH_SUCCESS";
 const STORIES_FETCH_FAILURE = "STORIES_FETCH_FAILURE";
 
 type Story = {
-  objectId: string;
+  objectID: string;
   url: string;
   title: string;
   author: string;
@@ -128,7 +128,7 @@ const getSumComments = (stories) => {
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState("search", "React");
-  const [radioValue, setRadioValue] = useState("false");
+  // const [radioValue, setRadioValue] = useState("false");
 
   const [stories, dispatchStories] = React.useReducer(storiesReducer, {
     data: [],
@@ -138,14 +138,14 @@ const App = () => {
 
   const [url, setUrl] = useState(`${API_ENDPOINT}${searchTerm}`);
 
-  const onRadioChange = (e) => {
-    setRadioValue((val) => {
-      if (!val) {
-        e.target.checked = false;
-      }
-      return !val;
-    });
-  };
+  // const onRadioChange = (e) => {
+  //   setRadioValue((val) => {
+  //     if (!val) {
+  //       e.target.checked = false;
+  //     }
+  //     return !val;
+  //   });
+  // };
 
   const handleFetchStories = useCallback(async () => {
     dispatchStories({ type: STORIES_FETCH_INIT });
@@ -217,3 +217,4 @@ const App = () => {
 };
 
 export default App;
+export { storiesReducer };
