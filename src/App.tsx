@@ -206,11 +206,11 @@ const App = () => {
         <List list={stories.data} onRemoveItem={handleRemoveStory} />
       )}
       <Button>Click Me</Button>
-      <RadioButton
+      {/* <RadioButton
         value={radioValue}
         label="Test radio"
         onClick={onRadioChange}
-      />
+      /> */}
       <Checkbox name="testCheck" label="Test Check" />
     </div>
   );
