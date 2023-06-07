@@ -1,6 +1,8 @@
 import { describe, it, expect } from "vitest";
 import App, { storiesReducer } from "./App";
 import axios from "axios";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import Item from "./components/Item";
 
 // Item,
 // List,
@@ -106,4 +108,12 @@ describe("storiesReducer", () => {
 describe("App component", () => {
   it("removes an item when clicking the Dismiss button", () => {});
   it("requests some initial stories from an API", () => {});
+});
+
+describe("Item", () => {
+  it("renders all properties", () => {
+    render(<Item item={storyOne} />);
+
+    screen.debug();
+  });
 });
