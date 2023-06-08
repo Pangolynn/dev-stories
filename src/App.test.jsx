@@ -114,6 +114,19 @@ describe("Item", () => {
   it("renders all properties", () => {
     render(<Item item={storyOne} />);
 
+    expect(screen.getByText("Jordan Walke")).toBeInTheDocument();
+
+    expect(screen.getByText("React")).toHaveAttribute(
+      "href",
+      "https://reactjs.org/"
+    );
+
     screen.debug();
+  });
+
+  it("renders a clickable dismiss button", () => {
+    render(<Item item={storyOne} />);
+
+    expect(screen.getByRole("button")).toBeInTheDocument();
   });
 });
