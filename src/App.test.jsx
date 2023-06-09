@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import App, { storiesReducer } from "./App";
 import axios from "axios";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
@@ -128,5 +128,15 @@ describe("Item", () => {
     render(<Item item={storyOne} />);
 
     expect(screen.getByRole("button")).toBeInTheDocument();
+  });
+
+  it("clicking the dismiss button calls the callback handler", () => {
+    const handleRemoveItem = vi.fn();
+
+    render(<Item item={storyOne} onRemoveItem={handleRemoveItem} />);
+
+    fireEvent.click(screen.getByRole("button"));
+
+    expect(handleRemoveItem).toHaveBeenCalledTimes(1);
   });
 });
