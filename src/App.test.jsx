@@ -3,6 +3,7 @@ import App, { storiesReducer } from "./App";
 import axios from "axios";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import Item from "./components/Item";
+import SearchForm from "./components/SearchForm";
 
 // Item,
 // List,
@@ -120,8 +121,6 @@ describe("Item", () => {
       "href",
       "https://reactjs.org/"
     );
-
-    screen.debug();
   });
 
   it("renders a clickable dismiss button", () => {
@@ -138,5 +137,20 @@ describe("Item", () => {
     fireEvent.click(screen.getByRole("button"));
 
     expect(handleRemoveItem).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("SearchForm", () => {
+  const searchFormProps = {
+    searchTerm: "react",
+    onSearchInput: vi.fn(),
+    onSearchSubmit: vi.fn(),
+    className: "test",
+  };
+
+  it("renders the input field with its value", () => {
+    render(<SearchForm {...searchFormProps} />);
+    screen.debug();
+    expect(screen.getByDisplayValue("react")).toBeInTheDocument();
   });
 });
