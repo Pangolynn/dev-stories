@@ -150,7 +150,41 @@ describe("SearchForm", () => {
 
   it("renders the input field with its value", () => {
     render(<SearchForm {...searchFormProps} />);
-    screen.debug();
+
     expect(screen.getByDisplayValue("react")).toBeInTheDocument();
   });
+
+  it("renders the correct label", () => {
+    render(<SearchForm {...searchFormProps} />);
+
+    expect(screen.getByLabelText(/Search/)).toBeInTheDocument();
+  });
+
+  it("calls onSearchInput on input field change", () => {
+    render(<SearchForm {...searchFormProps} />);
+
+    fireEvent.change(screen.getByDisplayValue("react"), {
+      target: { value: "Redux" },
+    });
+    expect(searchFormProps.onSearchInput).toHaveBeenCalled(1);
+  });
+
+  it("calls onSearchSubmit on button submit click", () => {
+    render(<SearchForm {...searchFormProps} />);
+
+    fireEvent.submit(screen.getByRole("button"));
+
+    expect(searchFormProps.onSearchSubmit).toHaveBeenCalledTimes(1);
+  });
+});
+
+// TODO: InputWithLabel tests and List tests
+describe("InputWithLabel", () => {
+  it("renders an input field", () => {});
+
+  it("renders a label", () => {});
+});
+
+describe("List", () => {
+  it("renders a list of Items", () => {});
 });

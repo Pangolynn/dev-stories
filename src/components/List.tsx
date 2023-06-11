@@ -9,7 +9,7 @@ type ListProps = {
 
 const List: React.FC<ListProps> = memo(({ list, onRemoveItem }) => (
   <ul>
-    {list !== "" &&
+    {list.length &&
       list.map((item) => (
         <Item key={item.objectID} item={item} onRemoveItem={onRemoveItem} />
       ))}
