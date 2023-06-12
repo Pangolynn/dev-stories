@@ -5,6 +5,8 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import Item from "./components/Item";
 import SearchForm from "./components/SearchForm";
 
+vi.mock("axios");
+
 // Item,
 // List,
 // SearchForm,
@@ -187,4 +189,20 @@ describe("InputWithLabel", () => {
 
 describe("List", () => {
   it("renders a list of Items", () => {});
+});
+
+describe("App", () => {
+  it("succeeds in fetching data", () => {
+    const promise = Promise.resolve({
+      data: {
+        hits: stories,
+      },
+    });
+
+    axios.get.mockImplementationOnce(() => promise);
+
+    render(<App />);
+
+    screen.debug();
+  });
 });
