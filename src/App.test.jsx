@@ -70,6 +70,7 @@ describe("storiesReducer", () => {
 
     const newState = storiesReducer(state, action);
 
+    // TODO: fix this, catching
     const getInit = async () => {
       try {
         const result = await axios.get(
@@ -192,7 +193,7 @@ describe("List", () => {
 });
 
 describe("App", () => {
-  it("succeeds in fetching data", () => {
+  it("succeeds in fetching data", async () => {
     const promise = Promise.resolve({
       data: {
         hits: stories,
@@ -203,6 +204,10 @@ describe("App", () => {
 
     render(<App />);
 
-    screen.debug();
+    expect(screen.queryByText(/Loading/)).toBeInTheDocument();
+
+    await waitFor(async () => await promise);
+
+    expect(screen.queryByText(/Loading/)).toBeNull();
   });
 });
