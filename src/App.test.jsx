@@ -73,7 +73,7 @@ describe("storiesReducer", () => {
     // TODO: fix this, catching
     const getInit = async () => {
       try {
-        const result = await axios.get(
+        const result = axios.get(
           "https://hn.algolia.com/api/v1/search?query=ruby"
         );
 
@@ -86,8 +86,8 @@ describe("storiesReducer", () => {
         };
 
         expect(newState).toStrictEqual(expectedState);
-      } catch {
-        console.log("error");
+      } catch (error) {
+        console.log(error);
       }
     };
     getInit();
@@ -209,5 +209,27 @@ describe("App", () => {
     await waitFor(async () => await promise);
 
     expect(screen.queryByText(/Loading/)).toBeNull();
+
+    expect(screen.getByText("React")).toBeInTheDocument();
+
+    expect(screen.getByText("Redux")).toBeInTheDocument();
+
+    expect(screen.getAllByText("Dismiss").length).toBe(2);
+
+    it("fails in fetching data", async () => {
+      const promise = Promise.reject();
+
+      axios.get.mockImplementationOnce(() => promise);
+
+      render(<App />);
+
+      expect(screen.getByText(/Loading/)).toBeInTheDocument();
+
+      try {
+        await waitFor(async () => await promise);
+      } catch (error) {
+        expect(screen.queryByText(/went wrong/)).toBeInTheDocument();
+      }
+    });
   });
 });
