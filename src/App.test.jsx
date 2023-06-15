@@ -4,6 +4,7 @@ import axios from "axios";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import Item from "./components/Item";
 import SearchForm from "./components/SearchForm";
+import { toBeInTheDocument } from "@testing-library/jest-dom/matchers";
 
 vi.mock("axios");
 
@@ -87,7 +88,7 @@ describe("storiesReducer", () => {
 
         expect(newState).toStrictEqual(expectedState);
       } catch (error) {
-        console.log(error);
+        console.log("error");
       }
     };
     getInit();
@@ -150,6 +151,13 @@ describe("SearchForm", () => {
     onSearchSubmit: vi.fn(),
     className: "test",
   };
+
+  // snapshot test
+  it("renders snapshot", () => {
+    const { container } = render(<SearchForm {...searchFormProps} />);
+
+    expect(container.firstChild).toMatchSnapshot();
+  });
 
   it("renders the input field with its value", () => {
     render(<SearchForm {...searchFormProps} />);
@@ -230,6 +238,105 @@ describe("App", () => {
       } catch (error) {
         expect(screen.queryByText(/went wrong/)).toBeInTheDocument();
       }
+    });
+
+    it("removes a story", async () => {
+      const promise = Promise.resolve({
+        data: {
+          hits: stories,
+        },
+      });
+
+      axios.get.mockImplementationOnce(() => promise);
+
+      render(<App />);
+
+      await waitFor(async () => await promise);
+
+      expect(screen.getAllByText("Dismiss").length).toBe(2);
+      expect(screen.getByText("Jordan Walke")).toBeInTheDocument();
+
+      fireEvent.click(screen.getAllByText("Dismiss")[0]);
+
+      expect(screen.getAllByText("Dismiss").length).toBe(1);
+      expect(screen.queryByText("Jordan Walke")).toBeNull();
+    });
+
+    it("searches for specific stories", async () => {
+      const reactPromise = Promise.resolve({
+        data: {
+          hits: stories,
+        },
+      });
+
+      const anotherStory = {
+        title: "JavaScript",
+        url: "https://en.wikipedia.org/wiki/JavaScript",
+        author: "Brendan Eich",
+        num_comments: 15,
+        points: 10,
+        objectID: 3,
+      };
+
+      const javascriptPromise = Promise.resolve({
+        data: {
+          hits: [anotherStory],
+        },
+      });
+
+      axios.get.mockImplementation((url) => {
+        if (url.includes("React")) {
+          return reactPromise;
+        }
+
+        if (url.includes("JavaScript")) {
+          return javascriptPromise;
+        }
+
+        throw Error();
+      });
+
+      // initial render
+
+      render(<App />);
+
+      // First Data Fetching
+
+      await waitFor(async () => await reactPromise);
+
+      expect(screen.queryByDisplayValue("React")).toBeInTheDocument();
+
+      expect(screen.queryByDisplayValue("JavaScript")).toBeNull();
+
+      expect(screen.queryByText("Jordan Walke")).toBeInTheDocument();
+
+      expect(
+        screen.queryByText("Dan Abramov, Andre Clark")
+      ).toBeInTheDocument();
+
+      expect(screen.queryByText("Brendan Eich")).toBeNull();
+
+      // user interaction -> search
+      fireEvent.change(screen.queryByDisplayValue("React"), {
+        target: {
+          value: "JavaScript",
+        },
+      });
+      expect(screen.queryByDisplayValue("React")).toBeNull();
+
+      expect(screen.queryByDisplayValue("JavaScript")).toBeInTheDocument();
+
+      fireEvent.submit(screen.queryByText("Submit"));
+
+      // 2nd data fetching
+
+      await waitFor(async () => await javascriptPromise);
+
+      expect(screen.queryByText("Jordan Walke")).toBeNull();
+
+      expect(screen.queryByText("Dan Abramov, Andrew Clark")).toBeNull();
+
+      expect(screen.queryByText("Brendan Eich")).toBeInTheDocument();
     });
   });
 });
