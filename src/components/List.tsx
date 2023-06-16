@@ -17,7 +17,37 @@ const List: React.FC<ListProps> = memo(({ list, onRemoveItem }) => {
   return (
     <ul>
       <li style={{ display: "flex" }}>
-        <span style={{ width: "40%" }}>Title</span>
+        <span style={{ width: "40%" }}>
+          <button type="button" onClick={() => handleSort("TITLE")}>
+            Title
+          </button>
+        </span>
+        <span style={{ width: "30%" }}>
+          <button type="button" onClick={() => handleSort("AUTHOR")}>
+            Author
+          </button>
+        </span>
+        <span style={{ width: "10%" }}>
+          <button
+            type="button"
+            onClick={() => {
+              handleSort("COMMENT");
+            }}
+          >
+            Comments
+          </button>
+        </span>
+        <span style={{ width: "10%" }}>
+          <button
+            type="button"
+            onClick={() => {
+              handleSort("POINT");
+            }}
+          >
+            Points
+          </button>
+        </span>
+        <span style={{ width: "10%" }}>Actions</span>
       </li>
 
       {list.length &&

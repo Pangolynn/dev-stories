@@ -9,7 +9,7 @@ type ItemProps = {
 
 const Item: React.FC<ItemProps> = ({ item, onRemoveItem }) => {
   return (
-    <li className={styles.item}>
+    <li style={{ display: "flex" }} className={styles.item}>
       <span style={{ width: "40%" }}>
         <a href={item.url}>{item.title}</a>
       </span>
