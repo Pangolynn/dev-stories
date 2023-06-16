@@ -4,7 +4,6 @@ import axios from "axios";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import Item from "./components/Item";
 import SearchForm from "./components/SearchForm";
-import { toBeInTheDocument } from "@testing-library/jest-dom/matchers";
 
 vi.mock("axios");
 
