@@ -1,6 +1,15 @@
 import { memo, useState } from "react";
 import { Stories, Story } from "../App";
+import { sortBy } from "lodash";
 import Item from "./Item";
+
+const SORTS = {
+  NONE: (list) => list,
+  TITLE: (list) => sortBy(list, "title"),
+  AUTHOR: (list) => sortBy(list, "author"),
+  COMMENT: (list) => sortBy(list, "num_comments").reverse(),
+  POINT: (list) => sortBy(list, "points").reverse(),
+};
 
 type ListProps = {
   list: Stories;
@@ -13,6 +22,9 @@ const List: React.FC<ListProps> = memo(({ list, onRemoveItem }) => {
   const handleSort = (sortKey) => {
     setSort(sortKey);
   };
+
+  const sortFx = SORTS[sort];
+  const sortedList = sortFx(list);
 
   return (
     <ul>
@@ -51,7 +63,7 @@ const List: React.FC<ListProps> = memo(({ list, onRemoveItem }) => {
       </li>
 
       {list.length &&
-        list.map((item) => (
+        sortedList.map((item) => (
           <Item key={item.objectID} item={item} onRemoveItem={onRemoveItem} />
         ))}
     </ul>

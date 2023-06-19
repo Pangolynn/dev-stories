@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
-import { sortBy } from "lodash";
 
 // Styling
 import styles from "./App.module.css";
@@ -22,14 +21,6 @@ const REMOVE_STORY = "REMOVE_STORY";
 const STORIES_FETCH_INIT = "STORIES_FETCH_INIT";
 const STORIES_FETCH_SUCCESS = "STORIES_FETCH_SUCCESS";
 const STORIES_FETCH_FAILURE = "STORIES_FETCH_FAILURE";
-
-const SORTS = {
-  NONE: (list) => list,
-  TITLE: (list) => sortBy(list, "title"),
-  AUTHOR: (list) => sortBy(list, "author"),
-  COMMENT: (list) => sortBy(list, "num_comments").reverse(),
-  POINT: (list) => sortBy(list, "points").reverse(),
-};
 
 type Story = {
   objectID: string;
