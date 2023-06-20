@@ -17,13 +17,18 @@ type ListProps = {
 };
 
 const List: React.FC<ListProps> = memo(({ list, onRemoveItem }) => {
-  const [sort, setSort] = useState("NONE");
+  const [sort, setSort] = useState({
+    sortKey: "NONE",
+    isReverse: false,
+  });
 
   const handleSort = (sortKey) => {
-    setSort(sortKey);
+    const isReverse = sort.sortKey === sortKey && !sort.isReverse;
+
+    setSort({ sortKey: sortKey, isReverse: isReverse });
   };
 
-  const sortFx = SORTS[sort];
+  const sortFx = SORTS[sort.sortKey];
   const sortedList = sortFx(list);
 
   return (
