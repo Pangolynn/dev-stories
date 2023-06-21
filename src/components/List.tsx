@@ -4,11 +4,11 @@ import { sortBy } from "lodash";
 import Item from "./Item";
 
 const SORTS = {
-  NONE: (list) => list,
-  TITLE: (list) => sortBy(list, "title"),
-  AUTHOR: (list) => sortBy(list, "author"),
-  COMMENT: (list) => sortBy(list, "num_comments").reverse(),
-  POINT: (list) => sortBy(list, "points").reverse(),
+  NONE: (list: Stories) => list,
+  TITLE: (list: Stories) => sortBy(list, "title"),
+  AUTHOR: (list: Stories) => sortBy(list, "author"),
+  COMMENT: (list: Stories) => sortBy(list, "num_comments").reverse(),
+  POINT: (list: Stories) => sortBy(list, "points").reverse(),
 };
 
 type ListProps = {
@@ -22,14 +22,15 @@ const List: React.FC<ListProps> = memo(({ list, onRemoveItem }) => {
     isReverse: false,
   });
 
-  const handleSort = (sortKey) => {
+  const handleSort = (sortKey: string) => {
     const isReverse = sort.sortKey === sortKey && !sort.isReverse;
 
     setSort({ sortKey: sortKey, isReverse: isReverse });
   };
 
   const sortFx = SORTS[sort.sortKey];
-  const sortedList = sortFx(list);
+  console.log(typeof sortFx);
+  const sortedList = sort.isReverse ? sortFx(list).reverse() : sortFx(list);
 
   return (
     <ul>
