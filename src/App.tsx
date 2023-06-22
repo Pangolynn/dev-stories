@@ -136,7 +136,7 @@ const App = () => {
     isError: false,
   });
 
-  const [url, setUrl] = useState(`${API_ENDPOINT}${searchTerm}`);
+  const [urls, setUrls] = useState([`${API_ENDPOINT}${searchTerm}`]);
 
   // const onRadioChange = (e) => {
   //   setRadioValue((val) => {
@@ -151,7 +151,8 @@ const App = () => {
     dispatchStories({ type: STORIES_FETCH_INIT });
 
     try {
-      const result = await axios.get(url);
+      const lastUrl = urls[urls.length - 1];
+      const result = await axios.get(lastUrl);
 
       dispatchStories({
         type: STORIES_FETCH_SUCCESS,
@@ -160,7 +161,7 @@ const App = () => {
     } catch {
       dispatchStories({ type: STORIES_FETCH_FAILURE });
     }
-  }, [url]);
+  }, [urls]);
 
   useEffect(() => {
     handleFetchStories();
@@ -171,7 +172,8 @@ const App = () => {
   };
 
   const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    setUrl(`${API_ENDPOINT}${searchTerm}`);
+    const url = `${API_ENDPOINT}${searchTerm}`;
+    setUrls(urls.concat(url));
 
     event.preventDefault();
   };
