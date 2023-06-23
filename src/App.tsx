@@ -65,6 +65,8 @@ type StoriesAction =
 
 export type { Story, Stories };
 
+const getLastSearches = (urls) => urls.slice(-5);
+
 // reducers come w/ a current state, and an action which comes with type/payload
 const storiesReducer = (state: StoriesState, action: StoriesAction) => {
   switch (action.type) {
@@ -185,6 +187,12 @@ const App = () => {
     });
   }, []);
 
+  const handleLastSearch = (url) => {
+    // do something
+  };
+
+  const lastSearches = getLastSearches(urls);
+
   const sumComments = React.useMemo(() => getSumComments(stories), [stories]);
 
   return (
@@ -201,19 +209,18 @@ const App = () => {
         className="button-large"
       />
 
+      {lastSearches.map((url) => (
+        <button key={url} type="button" onClick={() => handleLastSearch(url)}>
+          {url}{" "}
+        </button>
+      ))}
+
       {stories.isError && <p>Something went wrong.</p>}
       {stories.isLoading ? (
         <p>Loading</p>
       ) : (
         <List list={stories.data} onRemoveItem={handleRemoveStory} />
       )}
-      <Button>Click Me</Button>
-      {/* <RadioButton
-        value={radioValue}
-        label="Test radio"
-        onClick={onRadioChange}
-      /> */}
-      <Checkbox name="testCheck" label="Test Check" />
     </div>
   );
 };
