@@ -65,8 +65,6 @@ type StoriesAction =
 
 export type { Story, Stories };
 
-const getLastSearches = (urls) => urls.slice(-5);
-
 // reducers come w/ a current state, and an action which comes with type/payload
 const storiesReducer = (state: StoriesState, action: StoriesAction) => {
   switch (action.type) {
@@ -127,6 +125,11 @@ const getSumComments = (stories) => {
 
   return stories.data.reduce((result, value) => result + value.num_comments, 0);
 };
+
+const extractSearchTerm = (url) => url.replace(API_ENDPOINT, "");
+
+const getLastSearches = (urls) =>
+  urls.slice(-5).map((url) => extractSearchTerm(url));
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState("search", "React");
