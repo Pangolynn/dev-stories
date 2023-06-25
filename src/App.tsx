@@ -128,8 +128,7 @@ const getSumComments = (stories) => {
 
 const extractSearchTerm = (url) => url.replace(API_ENDPOINT, "");
 
-const getLastSearches = (urls) =>
-  urls.slice(-5).map((url) => extractSearchTerm(url));
+const getLastSearches = (urls) => urls.slice(-5).map(extractSearchTerm);
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState("search", "React");
@@ -142,15 +141,6 @@ const App = () => {
   });
 
   const [urls, setUrls] = useState([`${API_ENDPOINT}${searchTerm}`]);
-
-  // const onRadioChange = (e) => {
-  //   setRadioValue((val) => {
-  //     if (!val) {
-  //       e.target.checked = false;
-  //     }
-  //     return !val;
-  //   });
-  // };
 
   const handleFetchStories = useCallback(async () => {
     dispatchStories({ type: STORIES_FETCH_INIT });
@@ -212,9 +202,13 @@ const App = () => {
         className="button-large"
       />
 
-      {lastSearches.map((url) => (
-        <button key={url} type="button" onClick={() => handleLastSearch(url)}>
-          {url}{" "}
+      {lastSearches.map((searchTerm) => (
+        <button
+          key={searchTerm}
+          type="button"
+          onClick={() => handleLastSearch(searchTerm)}
+        >
+          {searchTerm}{" "}
         </button>
       ))}
 
