@@ -63,6 +63,8 @@ type StoriesAction =
   | StoriesFetchFailureAction
   | StoriesRemoveAction;
 
+const getUrl = (searchTerm) => `${API_ENDPOINT}${searchTerm}`;
+
 export type { Story, Stories };
 
 // reducers come w/ a current state, and an action which comes with type/payload
@@ -166,9 +168,13 @@ const App = () => {
     setSearchTerm(event.target.value);
   };
 
-  const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    const url = `${API_ENDPOINT}${searchTerm}`;
+  const handleSearch = (searchTerm) => {
+    const url = getUrl(searchTerm);
     setUrls(urls.concat(url));
+  };
+
+  const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    handleSearch(searchTerm);
 
     event.preventDefault();
   };
@@ -180,8 +186,8 @@ const App = () => {
     });
   }, []);
 
-  const handleLastSearch = (url) => {
-    // do something
+  const handleLastSearch = (searchTerm) => {
+    handleSearch(searchTerm);
   };
 
   const lastSearches = getLastSearches(urls);

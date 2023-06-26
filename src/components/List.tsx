@@ -22,7 +22,7 @@ const List: React.FC<ListProps> = memo(({ list, onRemoveItem }) => {
     isReverse: false,
   });
 
-  const handleSort = (sortKey: string) => {
+  const handleSort = (sortKey) => {
     const isReverse = sort.sortKey === sortKey && !sort.isReverse;
 
     setSort({ sortKey: sortKey, isReverse: isReverse });
