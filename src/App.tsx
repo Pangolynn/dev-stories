@@ -7,7 +7,6 @@ import { ReactComponent as Github } from "./github.svg";
 
 // UI Components
 import Button from "./UI/Button";
-// import RadioButton from "./UI/RadioButton";
 import Checkbox from "./UI/Checkbox";
 
 // Components
@@ -134,7 +133,6 @@ const getLastSearches = (urls) => urls.slice(-5).map(extractSearchTerm);
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState("search", "React");
-  // const [radioValue, setRadioValue] = useState("false");
 
   const [stories, dispatchStories] = React.useReducer(storiesReducer, {
     data: [],
@@ -142,7 +140,7 @@ const App = () => {
     isError: false,
   });
 
-  const [urls, setUrls] = useState([`${API_ENDPOINT}${searchTerm}`]);
+  const [urls, setUrls] = useState([getUrl(searchTerm)]);
 
   const handleFetchStories = useCallback(async () => {
     dispatchStories({ type: STORIES_FETCH_INIT });
