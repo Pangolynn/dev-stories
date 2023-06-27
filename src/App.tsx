@@ -129,7 +129,8 @@ const getSumComments = (stories) => {
 
 const extractSearchTerm = (url) => url.replace(API_ENDPOINT, "");
 
-const getLastSearches = (urls) => urls.slice(-5).map(extractSearchTerm);
+const getLastSearches = (urls) =>
+  urls.slice(-6).slice(0, -1).map(extractSearchTerm);
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState("search", "React");
@@ -206,9 +207,9 @@ const App = () => {
         className="button-large"
       />
 
-      {lastSearches.map((searchTerm) => (
+      {lastSearches.map((searchTerm, index) => (
         <button
-          key={searchTerm}
+          key={searchTerm + index}
           type="button"
           onClick={() => handleLastSearch(searchTerm)}
         >
