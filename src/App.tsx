@@ -130,7 +130,24 @@ const getSumComments = (stories) => {
 const extractSearchTerm = (url) => url.replace(API_ENDPOINT, "");
 
 const getLastSearches = (urls) =>
-  urls.slice(-6).slice(0, -1).map(extractSearchTerm);
+  urls
+    .reduce((result, url, index) => {
+      const searchTerm = extractSearchTerm(url);
+
+      if (index === 0) {
+        return result.concat(searchTerm);
+      }
+
+      const previousSearchTerm = result[result.length - 1];
+
+      if (searchTerm === previousSearchTerm) {
+        return result;
+      } else {
+        return result.concat(searchTerm);
+      }
+    }, [])
+    .slice(-6)
+    .slice(0, -1);
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState("search", "React");
