@@ -222,15 +222,10 @@ const App = () => {
         className="button-large"
       />
 
-      {lastSearches.map((searchTerm, index) => (
-        <button
-          key={searchTerm + index}
-          type="button"
-          onClick={() => handleLastSearch(searchTerm)}
-        >
-          {searchTerm}{" "}
-        </button>
-      ))}
+      <LastSearches
+        lastSearches={lastSearches}
+        onLastSearch={handleLastSearch}
+      />
 
       {stories.isError && <p>Something went wrong.</p>}
       {stories.isLoading ? (
@@ -241,6 +236,20 @@ const App = () => {
     </div>
   );
 };
+
+const LastSearches = ({ lastSearches, onLastSearch }) => (
+  <>
+    {lastSearches.map((searchTerm, index) => (
+      <button
+        key={searchTerm + index}
+        type="button"
+        onClick={() => onLastSearch(searchTerm)}
+      >
+        {searchTerm}{" "}
+      </button>
+    ))}
+  </>
+);
 
 export default App;
 export { storiesReducer };
