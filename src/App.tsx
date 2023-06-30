@@ -5,10 +5,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import styles from "./App.module.css";
 import { ReactComponent as Github } from "./github.svg";
 
-// UI Components
-import Button from "./UI/Button";
-import Checkbox from "./UI/Checkbox";
-
 // Components
 import List from "./components/List";
 import SearchForm from "./components/SearchForm";
@@ -203,6 +199,8 @@ const App = () => {
   }, []);
 
   const handleLastSearch = (searchTerm) => {
+    setSearchTerm(searchTerm);
+
     handleSearch(searchTerm);
   };
 
