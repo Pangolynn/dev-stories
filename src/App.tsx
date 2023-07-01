@@ -9,7 +9,15 @@ import { ReactComponent as Github } from "./github.svg";
 import List from "./components/List";
 import SearchForm from "./components/SearchForm";
 
-const API_ENDPOINT = "https://hn.algolia.com/api/v1/search?query=";
+// const API_ENDPOINT = "https://hn.algolia.com/api/v1/search?query=";
+// const getUrl = (searchTerm: string) => `${API_ENDPOINT}${searchTerm}`;
+
+const API_BASE = "https://hn.algolia.com/api/v1";
+const API_SEARCH = "/search";
+const PARAM_SEARCH = "query=";
+
+const getUrl = (searchTerm) =>
+  `${API_BASE}${API_SEARCH}?${PARAM_SEARCH}${searchTerm}`;
 
 /* storiesReducer action types */
 const REMOVE_STORY = "REMOVE_STORY";
@@ -57,8 +65,6 @@ type StoriesAction =
   | StoriesFetchSuccessAction
   | StoriesFetchFailureAction
   | StoriesRemoveAction;
-
-const getUrl = (searchTerm) => `${API_ENDPOINT}${searchTerm}`;
 
 export type { Story, Stories };
 
@@ -123,7 +129,11 @@ const getSumComments = (stories) => {
   return stories.data.reduce((result, value) => result + value.num_comments, 0);
 };
 
-const extractSearchTerm = (url) => url.replace(API_ENDPOINT, "");
+// const extractSearchTerm = (url) => url.replace(API_ENDPOINT, "");
+const extractSearchTerm = (url) =>
+  url
+    .substring(url.lastIndexOf("?") + 1, url.lastIndexOf("&"))
+    .replace(PARAM_SEARCH, "");
 
 const getLastSearches = (urls) =>
   urls
