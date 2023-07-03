@@ -9,9 +9,6 @@ import { ReactComponent as Github } from "./github.svg";
 import List from "./components/List";
 import SearchForm from "./components/SearchForm";
 
-// const API_ENDPOINT = "https://hn.algolia.com/api/v1/search?query=";
-// const getUrl = (searchTerm: string) => `${API_ENDPOINT}${searchTerm}`;
-
 const API_BASE = "https://hn.algolia.com/api/v1";
 const API_SEARCH = "/search";
 const PARAM_SEARCH = "query=";
@@ -82,7 +79,8 @@ const storiesReducer = (state: StoriesState, action: StoriesAction) => {
         ...state,
         isLoading: false,
         isError: false,
-        data: action.payload,
+        data: action.payload.list,
+        page: action.payload.page,
       };
     case STORIES_FETCH_FAILURE:
       return {
@@ -129,7 +127,6 @@ const getSumComments = (stories) => {
   return stories.data.reduce((result, value) => result + value.num_comments, 0);
 };
 
-// const extractSearchTerm = (url) => url.replace(API_ENDPOINT, "");
 const extractSearchTerm = (url) =>
   url
     .substring(url.lastIndexOf("?") + 1, url.lastIndexOf("&"))
@@ -160,6 +157,7 @@ const App = () => {
 
   const [stories, dispatchStories] = React.useReducer(storiesReducer, {
     data: [],
+    page: 0,
     isLoading: false,
     isError: false,
   });
@@ -175,7 +173,10 @@ const App = () => {
 
       dispatchStories({
         type: STORIES_FETCH_SUCCESS,
-        payload: result.data.hits,
+        payload: {
+          list: result.data.hits,
+          page: result.data.page,
+        },
       });
     } catch {
       dispatchStories({ type: STORIES_FETCH_FAILURE });
