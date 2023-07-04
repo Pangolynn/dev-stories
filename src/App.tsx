@@ -12,9 +12,10 @@ import SearchForm from "./components/SearchForm";
 const API_BASE = "https://hn.algolia.com/api/v1";
 const API_SEARCH = "/search";
 const PARAM_SEARCH = "query=";
+const PARAM_PAGE = "page=";
 
-const getUrl = (searchTerm) =>
-  `${API_BASE}${API_SEARCH}?${PARAM_SEARCH}${searchTerm}`;
+const getUrl = (searchTerm, page) =>
+  `${API_BASE}${API_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}`;
 
 /* storiesReducer action types */
 const REMOVE_STORY = "REMOVE_STORY";
@@ -162,7 +163,7 @@ const App = () => {
     isError: false,
   });
 
-  const [urls, setUrls] = useState([getUrl(searchTerm)]);
+  const [urls, setUrls] = useState([getUrl(searchTerm, 0)]);
 
   const handleFetchStories = useCallback(async () => {
     dispatchStories({ type: STORIES_FETCH_INIT });
@@ -191,13 +192,13 @@ const App = () => {
     setSearchTerm(event.target.value);
   };
 
-  const handleSearch = (searchTerm) => {
-    const url = getUrl(searchTerm);
+  const handleSearch = (searchTerm, page) => {
+    const url = getUrl(searchTerm, page);
     setUrls(urls.concat(url));
   };
 
   const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    handleSearch(searchTerm);
+    handleSearch(searchTerm, 0);
 
     event.preventDefault();
   };
@@ -212,7 +213,7 @@ const App = () => {
   const handleLastSearch = (searchTerm) => {
     setSearchTerm(searchTerm);
 
-    handleSearch(searchTerm);
+    handleSearch(searchTerm, 0);
   };
 
   const lastSearches = getLastSearches(urls);
