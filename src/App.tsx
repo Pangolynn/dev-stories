@@ -38,6 +38,7 @@ type StoriesState = {
   data: Stories;
   isLoading: boolean;
   isError: boolean;
+  page: number;
 };
 
 type StoriesFetchInitAction = {
@@ -192,7 +193,13 @@ const App = () => {
     setSearchTerm(event.target.value);
   };
 
-  const handleSearch = (searchTerm, page) => {
+  const handleMore = () => {
+    const lastUrl = urls[urls.length - 1];
+    const searchTerm = extractSearchTerm(lastUrl);
+    handleSearch(searchTerm, stories.page + 1);
+  };
+
+  const handleSearch = (searchTerm, page: number) => {
     const url = getUrl(searchTerm, page);
     setUrls(urls.concat(url));
   };
@@ -245,6 +252,9 @@ const App = () => {
       ) : (
         <List list={stories.data} onRemoveItem={handleRemoveStory} />
       )}
+      <button type="button" onClick={handleMore}>
+        More
+      </button>
     </div>
   );
 };
