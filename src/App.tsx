@@ -81,7 +81,10 @@ const storiesReducer = (state: StoriesState, action: StoriesAction) => {
         ...state,
         isLoading: false,
         isError: false,
-        data: action.payload.list,
+        data:
+          action.payload.page === 0
+            ? action.payload.list
+            : state.data.concat(action.payload.list),
         page: action.payload.page,
       };
     case STORIES_FETCH_FAILURE:
