@@ -14,7 +14,7 @@ const API_SEARCH = "/search";
 const PARAM_SEARCH = "query=";
 const PARAM_PAGE = "page=";
 
-const getUrl = (searchTerm, page) =>
+const getUrl = (searchTerm: string, page: number) =>
   `${API_BASE}${API_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}`;
 
 /* storiesReducer action types */
@@ -132,14 +132,14 @@ const getSumComments = (stories) => {
   return stories.data.reduce((result, value) => result + value.num_comments, 0);
 };
 
-const extractSearchTerm = (url) =>
+const extractSearchTerm = (url: string) =>
   url
     .substring(url.lastIndexOf("?") + 1, url.lastIndexOf("&"))
     .replace(PARAM_SEARCH, "");
 
 const getLastSearches = (urls) =>
   urls
-    .reduce((result, url, index) => {
+    .reduce((result, url: string, index) => {
       const searchTerm = extractSearchTerm(url);
 
       if (index === 0) {
@@ -220,7 +220,7 @@ const App = () => {
     });
   }, []);
 
-  const handleLastSearch = (searchTerm) => {
+  const handleLastSearch = (searchTerm: string) => {
     setSearchTerm(searchTerm);
 
     handleSearch(searchTerm, 0);
